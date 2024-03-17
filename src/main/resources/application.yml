@@ -1,0 +1,37 @@
+spring:
+  cloud:
+    function:
+      definition: producer;consumer
+    stream:
+      kafka:
+        streams:
+          bindings:
+            consumer-in-0:
+              consumer:
+                keySerde: org.apache.kafka.common.serialization.Serdes$StringSerde
+                valueSerde: com.example.chatroomskafkabackendproducer.converter.ChatMessageSerDes
+
+          binder:
+            configuration:
+              commit.interval.ms: 2000
+        binder:
+          brokers:
+            - localhost:9092
+        bindings:
+          producer-out-0:
+            producer:
+              configuration:
+                key.serializer: org.apache.kafka.common.serialization.StringSerializer
+
+          consumer-in-0:
+            consumer:
+              configuration:
+                group-id: my-consumer-group
+                value:
+                  deserializer: com.example.chatroomskafkabackendproducer.converter.ChatMessageSerDes
+
+      bindings:
+        producer-out-0:
+          destination: chat-room-topic
+        consumer-in-0:
+          destination: chat-room-topic
