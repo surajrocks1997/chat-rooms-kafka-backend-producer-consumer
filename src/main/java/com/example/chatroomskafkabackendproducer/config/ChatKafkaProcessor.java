@@ -20,12 +20,27 @@ import java.util.function.Supplier;
 public class ChatKafkaProcessor {
 
     private final WebSocketSubscriberService webSocketSubscriberService;
+    private final String[] usernames = {
+            "Suraj", "Yash", "Simran", "Sangamesh", "Hitesh", "Akshat", "Shivangi", "Divya", "Ganesh", "Shivam"
+    };
+    private final String[] messages = {
+            "This is a random test message to check word count",
+            "Some dummy sample test message",
+            "Hey guys, what's up",
+            "I'm feeling energetic today",
+            "I'm so tired that i will sleep instantly",
+            "We are going out to nearby restaurant for dinner",
+            "Let's make this project work today"
+    };
 
     @Bean
     public Supplier<org.springframework.messaging.Message<Message>> producer() {
         return () -> {
             ChatRoomName randomChatRoomName = ChatRoomName.values()[new Random().nextInt(ChatRoomName.values().length)];
-            Message message = new Message("Suraj", "Testing", String.valueOf(System.currentTimeMillis()), randomChatRoomName.name());
+            Message message = new Message(
+                    usernames[new Random().nextInt(usernames.length)],
+                    messages[new Random().nextInt(messages.length)],
+                    String.valueOf(System.currentTimeMillis()), randomChatRoomName.name());
             return MessageBuilder
                     .withPayload(message)
                     .build();
