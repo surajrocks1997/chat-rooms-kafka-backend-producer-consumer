@@ -1,4 +1,9 @@
 spring:
+  integration:
+    poller:
+      fixed-delay: 1000
+      initial-delay: 5000
+      timeUnit: MILLISECONDS
   cloud:
     function:
       definition: producer;consumer

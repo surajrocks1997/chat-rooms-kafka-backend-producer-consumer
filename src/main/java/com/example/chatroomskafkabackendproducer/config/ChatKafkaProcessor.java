@@ -26,11 +26,13 @@ public class ChatKafkaProcessor {
     private final String[] messages = {
             "This is a random test message to check word count",
             "Some dummy sample test message",
-            "Hey guys, what's up",
-            "I'm feeling energetic today",
-            "I'm so tired that i will sleep instantly",
+            "Hey guys, whats up",
+            "I am feeling energetic today",
+            "I am so tired that i will sleep instantly",
             "We are going out to nearby restaurant for dinner",
-            "Let's make this project work today"
+            "Lets make this project work today",
+            "Yes!!!, This project is finally working",
+            "Yay, we made it work"
     };
 
     @Bean
