@@ -1,7 +1,7 @@
 spring:
   integration:
     poller:
-      fixed-delay: 1000
+      fixed-delay: 500
       initial-delay: 5000
       timeUnit: MILLISECONDS
   cloud:
