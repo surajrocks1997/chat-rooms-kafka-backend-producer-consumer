@@ -35,19 +35,19 @@ public class ChatKafkaProcessor {
             "Yay, we made it work"
     };
 
-    @Bean
-    public Supplier<org.springframework.messaging.Message<Message>> producer() {
-        return () -> {
-            ChatRoomName randomChatRoomName = ChatRoomName.values()[new Random().nextInt(ChatRoomName.values().length)];
-            Message message = new Message(
-                    usernames[new Random().nextInt(usernames.length)],
-                    messages[new Random().nextInt(messages.length)],
-                    String.valueOf(System.currentTimeMillis()), randomChatRoomName.name());
-            return MessageBuilder
-                    .withPayload(message)
-                    .build();
-        };
-    }
+//    @Bean
+//    public Supplier<org.springframework.messaging.Message<Message>> producer() {
+//        return () -> {
+//            ChatRoomName randomChatRoomName = ChatRoomName.values()[new Random().nextInt(ChatRoomName.values().length)];
+//            Message message = new Message(
+//                    usernames[new Random().nextInt(usernames.length)],
+//                    messages[new Random().nextInt(messages.length)],
+//                    String.valueOf(System.currentTimeMillis()), randomChatRoomName.name());
+//            return MessageBuilder
+//                    .withPayload(message)
+//                    .build();
+//        };
+//    }
 
     @Bean
     public Consumer<KStream<String, Message>> consumer() {
