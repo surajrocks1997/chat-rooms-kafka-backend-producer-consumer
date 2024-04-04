@@ -1,14 +1,15 @@
 package com.example.chatroomskafkabackendproducer.config;
 
+import com.example.chatroomskafkabackendproducer.pojo.ChatRoomMessage;
+import com.example.chatroomskafkabackendproducer.pojo.ChatRoomName;
 import com.example.chatroomskafkabackendproducer.pojo.MessageType;
-import com.example.chatroomskafkabackendproducer.pojo.UserPresence;
+import com.example.chatroomskafkabackendproducer.service.KafkaProducerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.stereotype.Component;
-import org.springframework.web.socket.messaging.SessionConnectedEvent;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 
 @Component
@@ -17,22 +18,24 @@ import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 public class WebSocketEventListener {
 
     private final SimpMessageSendingOperations messageTemplate;
+    private final KafkaProducerService kafkaProducerService;
 
     @EventListener
     public void handleWebSocketUserPresenceDisconnect(SessionDisconnectEvent event) {
         StompHeaderAccessor headerAccessor = StompHeaderAccessor.wrap(event.getMessage());
-        String email = (String) headerAccessor.getSessionAttributes().get("email");
+        String username = (String) headerAccessor.getSessionAttributes().get("username");
         String chatRoomName = (String) headerAccessor.getSessionAttributes().get("chatRoomName");
-        UserPresence userPresence = UserPresence
+        ChatRoomMessage message = ChatRoomMessage
                 .builder()
-                .presenceType(MessageType.USER_OFFLINE)
-                .email(email)
+                .messageType(MessageType.USER_OFFLINE)
+                .username(username)
+                .chatRoomName(ChatRoomName.valueOf(chatRoomName))
                 .build();
 
         log.info("From Disconnect Event******************");
-        log.info(userPresence.toString());
+        log.info(message.toString());
         log.info(chatRoomName);
 
-        messageTemplate.convertAndSend("/topic/chatRoom." + chatRoomName, userPresence);
+        kafkaProducerService.produce(message);
     }
 }
