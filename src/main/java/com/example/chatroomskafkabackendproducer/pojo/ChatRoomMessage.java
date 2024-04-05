@@ -1,6 +1,5 @@
 package com.example.chatroomskafkabackendproducer.pojo;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 
 @Data
@@ -13,4 +12,5 @@ public class ChatRoomMessage {
     private ChatRoomName chatRoomName;
     private String message;
     private String timestamp;
+    private Object additionalData;
 }
