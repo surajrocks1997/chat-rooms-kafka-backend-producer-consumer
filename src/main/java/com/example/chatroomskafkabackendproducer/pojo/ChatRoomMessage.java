@@ -1,15 +1,16 @@
 package com.example.chatroomskafkabackendproducer.pojo;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Message {
+@Builder
+public class ChatRoomMessage {
+    private MessageType messageType;
     private String username;
+    private ChatRoomName chatRoomName;
     private String message;
     private String timestamp;
-    private String chatRoomName;
+    private Object additionalData;
 }

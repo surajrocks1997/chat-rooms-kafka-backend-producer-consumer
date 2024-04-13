@@ -1,13 +1,15 @@
 package com.example.chatroomskafkabackendproducer.config;
 
+import com.example.chatroomskafkabackendproducer.pojo.ChatRoomMessage;
 import com.example.chatroomskafkabackendproducer.pojo.ChatRoomName;
-import com.example.chatroomskafkabackendproducer.pojo.Message;
+import com.example.chatroomskafkabackendproducer.pojo.MessageType;
 import com.example.chatroomskafkabackendproducer.service.WebSocketSubscriberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.streams.kstream.KStream;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
 
 import java.util.Random;
@@ -21,7 +23,17 @@ public class ChatKafkaProcessor {
 
     private final WebSocketSubscriberService webSocketSubscriberService;
     private final String[] usernames = {
-            "Suraj", "Yash", "Simran", "Sangamesh", "Hitesh", "Akshat", "Shivangi", "Divya", "Ganesh", "Shivam"
+            "suraj.bot@email.com",
+            "yash.bot@email.com",
+            "simran.bot@email.com",
+            "sangamesh.bot@email.com",
+            "hitest.bot@email.com",
+            "akshat.bot@email.com",
+            "shivangi.bot@email.com",
+            "divya.bot@email.com",
+            "ganesh.bot@email.com",
+            "shivam.bot@email.com",
+            "kundan.bot@email.com"
     };
     private final String[] messages = {
             "This is a random test message to check word count",
@@ -32,17 +44,22 @@ public class ChatKafkaProcessor {
             "We are going out to nearby restaurant for dinner",
             "Lets make this project work today",
             "Yes!!!, This project is finally working",
-            "Yay, we made it work"
+            "Yay, we made it work",
+            "I'm super busy today"
     };
 
 //    @Bean
-//    public Supplier<org.springframework.messaging.Message<Message>> producer() {
+//    public Supplier<Message<ChatRoomMessage>> producer() {
 //        return () -> {
 //            ChatRoomName randomChatRoomName = ChatRoomName.values()[new Random().nextInt(ChatRoomName.values().length)];
-//            Message message = new Message(
+//            ChatRoomMessage message = new ChatRoomMessage(
+//                    MessageType.CHAT_MESSAGE,
 //                    usernames[new Random().nextInt(usernames.length)],
+//                    randomChatRoomName,
 //                    messages[new Random().nextInt(messages.length)],
-//                    String.valueOf(System.currentTimeMillis()), randomChatRoomName.name());
+//                    String.valueOf(System.currentTimeMillis()),
+//                    null);
+//
 //            return MessageBuilder
 //                    .withPayload(message)
 //                    .build();
@@ -50,7 +67,7 @@ public class ChatKafkaProcessor {
 //    }
 
     @Bean
-    public Consumer<KStream<String, Message>> consumer() {
+    public Consumer<KStream<String, ChatRoomMessage>> consumer() {
         return kStream -> kStream
                 .peek((key, value) -> log.info("Consumer Data: {} ", value))
                 .foreach((key, value) -> webSocketSubscriberService.sendToSubscriber(value, value.getChatRoomName()));
