@@ -40,3 +40,7 @@ spring:
           destination: chat-room-topic
         consumer-in-0:
           destination: chat-room-topic
+
+
+app:
+  jwtSecret: 61fa7f0ba87e49a5419f0c6a686d9f6191c649bb48d917b77e356298663a1d64
