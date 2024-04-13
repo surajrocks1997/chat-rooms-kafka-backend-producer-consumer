@@ -57,7 +57,8 @@ public class ChatKafkaProcessor {
 //                    usernames[new Random().nextInt(usernames.length)],
 //                    randomChatRoomName,
 //                    messages[new Random().nextInt(messages.length)],
-//                    String.valueOf(System.currentTimeMillis()));
+//                    String.valueOf(System.currentTimeMillis()),
+//                    null);
 //
 //            return MessageBuilder
 //                    .withPayload(message)
