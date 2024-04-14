@@ -1,4 +1,10 @@
 spring:
+
+  data:
+    mongodb:
+      uri: mongodb://admin:admin@localhost:27017/
+      database: mongodb-test
+
   integration:
     poller:
       fixed-delay: 500
