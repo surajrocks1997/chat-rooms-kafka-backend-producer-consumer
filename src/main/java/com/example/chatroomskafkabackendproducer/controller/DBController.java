@@ -17,7 +17,6 @@ import java.util.Optional;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("/api")
 public class DBController {
 
@@ -33,7 +32,7 @@ public class DBController {
 
     @PostMapping("/initUserSocialDetails")
     public ResponseEntity<?> socialDetailsInsertTest(@RequestBody Map<Object, Object> body) {
-        String userId = (String) body.get("userId");
+        String userId = String.valueOf(body.get("userId"));
 
         UserSocialDetails userSocialDetails = new UserSocialDetails(userId);
         UserSocialDetails res = userSocialDetailsRepository.save(userSocialDetails);

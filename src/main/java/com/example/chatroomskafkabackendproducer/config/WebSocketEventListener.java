@@ -25,17 +25,22 @@ public class WebSocketEventListener {
         StompHeaderAccessor headerAccessor = StompHeaderAccessor.wrap(event.getMessage());
         String username = (String) headerAccessor.getSessionAttributes().get("username");
         String chatRoomName = (String) headerAccessor.getSessionAttributes().get("chatRoomName");
-        ChatRoomMessage message = ChatRoomMessage
-                .builder()
-                .messageType(MessageType.USER_OFFLINE)
-                .username(username)
-                .chatRoomName(ChatRoomName.valueOf(chatRoomName))
-                .build();
+        try {
+            ChatRoomMessage message = ChatRoomMessage
+                    .builder()
+                    .messageType(MessageType.USER_OFFLINE)
+                    .username(username)
+                    .chatRoomName(ChatRoomName.valueOf(chatRoomName))
+                    .build();
 
-        log.info("From Disconnect Event******************");
-        log.info(message.toString());
-        log.info(chatRoomName);
+            log.info("From Disconnect Event******************");
+            log.info(message.toString());
+            log.info(chatRoomName);
 
-        kafkaProducerService.produce(message);
+            kafkaProducerService.produce(message);
+        } catch (IllegalArgumentException e) {
+            log.info("Caught Error At SessionDisconnectEvent: {}", headerAccessor);
+            throw new RuntimeException(e);
+        }
     }
 }

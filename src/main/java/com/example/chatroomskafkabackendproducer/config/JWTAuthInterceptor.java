@@ -17,6 +17,13 @@ public class JWTAuthInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        log.info("From Auth Interceptor********");
+        log.info(request.getMethod());
+        if (request.getMethod().equals("OPTIONS")) {
+            // preflight request
+            return true;
+        }
+
         final String authToken = request.getHeader("x-auth-token");
 
         log.debug("URI: {}", request.getRequestURI());
