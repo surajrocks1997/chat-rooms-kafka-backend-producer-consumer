@@ -28,6 +28,7 @@ public class ChatRoomController {
             case USER_ONLINE:
             case USER_OFFLINE:
                 headerAccessor.getSessionAttributes().put("username", message.getUsername());
+                headerAccessor.getSessionAttributes().put("userId", message.getUserId());
                 headerAccessor.getSessionAttributes().put("chatRoomName", chatRoomName);
                 log.info(message.toString());
                 producerService.produce(message);

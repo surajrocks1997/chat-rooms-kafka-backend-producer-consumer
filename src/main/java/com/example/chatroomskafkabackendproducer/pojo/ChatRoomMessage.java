@@ -9,6 +9,7 @@ import lombok.*;
 public class ChatRoomMessage {
     private MessageType messageType;
     private String username;
+    private String userId;
     private ChatRoomName chatRoomName;
     private String message;
     private String timestamp;
