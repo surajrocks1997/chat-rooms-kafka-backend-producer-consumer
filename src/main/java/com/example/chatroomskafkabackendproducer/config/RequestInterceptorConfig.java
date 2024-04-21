@@ -16,7 +16,7 @@ public class RequestInterceptorConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry
                 .addInterceptor(new JWTAuthInterceptor(jwtTokenValidationService))
-                .addPathPatterns("/api/*")
-                .addPathPatterns("/chat-rooms/*");
+                .addPathPatterns("/api/**")
+                .addPathPatterns("/chat-rooms/**");
     }
 }
