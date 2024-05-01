@@ -5,8 +5,12 @@ import com.example.chatroomskafkabackendproducer.dao.UserSocialDetailsRepository
 import com.example.chatroomskafkabackendproducer.pojo.CustomException;
 import com.example.chatroomskafkabackendproducer.pojo.User;
 import com.example.chatroomskafkabackendproducer.pojo.UserSocialDetails;
+import com.example.chatroomskafkabackendproducer.service.DBService;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +26,7 @@ public class DBController {
 
     private final UserSocialDetailsRepository userSocialDetailsRepository;
     private final UserRepository userRepository;
+    private final DBService dbService;
 
 
     @GetMapping("/test")
@@ -63,5 +68,13 @@ public class DBController {
                     .build(), HttpStatus.OK
             );
         } else throw new CustomException("User Not Found!!", HttpStatus.NOT_FOUND);
+    }
+
+    @GetMapping("/sendFR/{receiverId}")
+    public void sendFriendRequest(HttpServletRequest request, @PathVariable String receiverId) {
+
+        Map<String, Object> userMap = (Map<String, Object>) request.getAttribute("user");
+        String userId = String.valueOf(userMap.get("id"));
+        dbService.sendFR(userId, receiverId);
     }
 }

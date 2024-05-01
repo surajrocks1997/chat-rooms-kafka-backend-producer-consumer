@@ -1,5 +1,6 @@
 package com.example.chatroomskafkabackendproducer.pojo;
 
+import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,6 +16,7 @@ import java.util.List;
 @Builder
 @Document("user-social-details-collection")
 public class UserSocialDetails {
+    @Id
     private String userId;
     private List<String> friendIds;
     private FriendRequestDetails friendRequestDetails;
