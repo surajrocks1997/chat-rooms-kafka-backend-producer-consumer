@@ -38,6 +38,9 @@ public class ChatRoomController {
                 // handle user typing:
                 return;
 
+//            case SEND_FRIEND_REQUEST:
+
+
             default:
                 log.warn("Unidentifiable Message Type!!!");
         }

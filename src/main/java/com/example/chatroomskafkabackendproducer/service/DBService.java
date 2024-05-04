@@ -1,6 +1,5 @@
 package com.example.chatroomskafkabackendproducer.service;
 
-import com.example.chatroomskafkabackendproducer.dao.UserSocialDetailsRepository;
 import com.example.chatroomskafkabackendproducer.pojo.UserSocialDetails;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,16 +13,14 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 @Slf4j
 public class DBService {
-
-    private final UserSocialDetailsRepository userSocialDetailsRepository;
     private final MongoTemplate mongoTemplate;
 
     public void sendFR(String senderId, String receiverId) {
-        extracted("sent", senderId, receiverId);
-        extracted("pending", receiverId, senderId);
+        updateFRAttributes("sent", senderId, receiverId);
+        updateFRAttributes("pending", receiverId, senderId);
     }
 
-    private void extracted(String key, String userId, String value) {
+    private void updateFRAttributes(String key, String userId, String value) {
         Query query = new Query(Criteria.where("userId").is(userId));
         String updateKey = "friendRequestDetails." + (key.equals("sent") ? "sent" : "received.pending");
         Update update = new Update().push(updateKey, value);

@@ -5,5 +5,6 @@ public enum MessageType {
     USER_OFFLINE,
     USER_TYPING,
     CHAT_MESSAGE,
-    PRIVATE_MESSAGE
+    PRIVATE_MESSAGE,
+    SEND_FRIEND_REQUEST,
 }
