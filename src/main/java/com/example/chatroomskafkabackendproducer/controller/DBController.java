@@ -6,15 +6,14 @@ import com.example.chatroomskafkabackendproducer.pojo.CustomException;
 import com.example.chatroomskafkabackendproducer.pojo.User;
 import com.example.chatroomskafkabackendproducer.pojo.UserSocialDetails;
 import com.example.chatroomskafkabackendproducer.service.DBService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -38,7 +37,7 @@ public class DBController {
 
     @PostMapping("/initUserSocialDetails")
     public ResponseEntity<UserSocialDetails> initUserSocialDetails(@RequestBody Map<Object, Object> body) {
-        String userId = String.valueOf(body.get("userId"));
+        String userId = String.valueOf(body.get("id"));
 
         UserSocialDetails userSocialDetails = new UserSocialDetails(userId);
         UserSocialDetails res = userSocialDetailsRepository.save(userSocialDetails);
@@ -68,6 +67,12 @@ public class DBController {
                     .build(), HttpStatus.OK
             );
         } else throw new CustomException("User Not Found!!", HttpStatus.NOT_FOUND);
+    }
+
+    @PostMapping("/users/userIds")
+    public ResponseEntity<List<User>> getListOfUsersById(@RequestBody List<Long> ids) {
+        List<User> allById = userRepository.findAllById(ids);
+        return new ResponseEntity<>(allById, HttpStatus.OK);
     }
 
     @GetMapping("/sendFR/{receiverId}")

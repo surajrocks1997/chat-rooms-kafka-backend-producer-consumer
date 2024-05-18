@@ -1,6 +1,4 @@
 spring:
-
-
   data:
     mongodb:
       uri: mongodb://admin:admin@localhost:27017/
@@ -20,48 +18,8 @@ spring:
     password: admin
     driver-class-name: com.mysql.cj.jdbc.Driver
 
-  integration:
-    poller:
-      fixed-delay: 500
-      initial-delay: 5000
-      timeUnit: MILLISECONDS
-  cloud:
-    function:
-      definition: producer;consumer
-    stream:
-      kafka:
-        streams:
-          bindings:
-            consumer-in-0:
-              consumer:
-                keySerde: org.apache.kafka.common.serialization.Serdes$StringSerde
-                valueSerde: com.example.chatroomskafkabackendproducer.converter.ChatMessageSerDes
-
-          binder:
-            configuration:
-              commit.interval.ms: 2000
-        binder:
-          brokers:
-            - localhost:9092
-        bindings:
-          producer-out-0:
-            producer:
-              configuration:
-                key.serializer: org.apache.kafka.common.serialization.StringSerializer
-
-          consumer-in-0:
-            consumer:
-              configuration:
-                group-id: my-consumer-group
-                value:
-                  deserializer: com.example.chatroomskafkabackendproducer.converter.ChatMessageSerDes
-
-      bindings:
-        producer-out-0:
-          destination: chat-room-topic
-        consumer-in-0:
-          destination: chat-room-topic
-
+  kafka:
+    bootstrap-servers: localhost:9092
 
 app:
   jwtSecret: 61fa7f0ba87e49a5419f0c6a686d9f6191c649bb48d917b77e356298663a1d64

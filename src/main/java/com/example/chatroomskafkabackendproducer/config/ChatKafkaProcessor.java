@@ -3,18 +3,15 @@ package com.example.chatroomskafkabackendproducer.config;
 import com.example.chatroomskafkabackendproducer.pojo.ChatRoomMessage;
 import com.example.chatroomskafkabackendproducer.pojo.ChatRoomName;
 import com.example.chatroomskafkabackendproducer.pojo.MessageType;
+import com.example.chatroomskafkabackendproducer.service.KafkaProducerService;
 import com.example.chatroomskafkabackendproducer.service.WebSocketSubscriberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.kafka.streams.kstream.KStream;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.messaging.Message;
-import org.springframework.messaging.support.MessageBuilder;
+import org.springframework.scheduling.annotation.Scheduled;
 
 import java.util.Random;
-import java.util.function.Consumer;
-import java.util.function.Supplier;
+import java.util.concurrent.TimeUnit;
 
 @Configuration
 @Slf4j
@@ -22,6 +19,7 @@ import java.util.function.Supplier;
 public class ChatKafkaProcessor {
 
     private final WebSocketSubscriberService webSocketSubscriberService;
+    private final KafkaProducerService producerService;
     private final String[] usernames = {
             "suraj.bot@email.com",
             "yash.bot@email.com",
@@ -48,28 +46,18 @@ public class ChatKafkaProcessor {
             "I'm super busy today"
     };
 
-//    @Bean
-//    public Supplier<Message<ChatRoomMessage>> producer() {
-//        return () -> {
-//            ChatRoomName randomChatRoomName = ChatRoomName.values()[new Random().nextInt(ChatRoomName.values().length)];
-//            ChatRoomMessage message = new ChatRoomMessage(
-//                    MessageType.CHAT_MESSAGE,
-//                    usernames[new Random().nextInt(usernames.length)],
-//                    randomChatRoomName,
-//                    messages[new Random().nextInt(messages.length)],
-//                    String.valueOf(System.currentTimeMillis()),
-//                    null);
-//
-//            return MessageBuilder
-//                    .withPayload(message)
-//                    .build();
-//        };
-//    }
+    @Scheduled(fixedRate = 500, timeUnit = TimeUnit.MILLISECONDS)
+    private void produce() {
+        ChatRoomName randomChatRoomName = ChatRoomName.values()[new Random().nextInt(ChatRoomName.values().length)];
+        ChatRoomMessage message = new ChatRoomMessage(
+                MessageType.CHAT_MESSAGE,
+                usernames[new Random().nextInt(usernames.length)],
+                "0",
+                randomChatRoomName,
+                messages[new Random().nextInt(messages.length)],
+                String.valueOf(System.currentTimeMillis()),
+                null);
 
-    @Bean
-    public Consumer<KStream<String, ChatRoomMessage>> consumer() {
-        return kStream -> kStream
-                .peek((key, value) -> log.info("Consumer Data: {} ", value))
-                .foreach((key, value) -> webSocketSubscriberService.sendToSubscriber(value, value.getChatRoomName()));
+        producerService.produce(message);
     }
 }

@@ -18,6 +18,7 @@ bin\windows\kafka-console-consumer.bat --bootstrap-server localhost:9092 --topic
 bin\windows\kafka-console-consumer.bat --bootstrap-server localhost:9092 --topic chat-room-aggregator-messages-per-room --from-beginning --property key.separator=: --property print.key=true --property print.offset=true --property print.partition=true --property print.value=true
 bin\windows\kafka-console-consumer.bat --bootstrap-server localhost:9092 --topic chat-room-aggregator-word-count --from-beginning --property key.separator=: --property print.key=true --property print.offset=true --property print.partition=true --property print.value=true
 
+bin\windows\kafka-console-consumer.bat --bootstrap-server localhost:9092 --topic private-chat --from-beginning --group my-private-consumer-group --property key.separator=: --property print.key=true --property print.offset=true --property print.partition=true --property print.value=true
 
 // listen to only future messages
 bin\windows\kafka-console-consumer.bat --topic testTopic --bootstrap-server localhost:9092

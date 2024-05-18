@@ -1,11 +1,10 @@
 package com.example.chatroomskafkabackendproducer.service;
 
 import com.example.chatroomskafkabackendproducer.pojo.ChatRoomMessage;
+import com.example.chatroomskafkabackendproducer.pojo.PrivateChatMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cloud.stream.function.StreamBridge;
-import org.springframework.messaging.Message;
-import org.springframework.messaging.support.MessageBuilder;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
@@ -15,11 +14,14 @@ import java.util.Set;
 @Slf4j
 public class KafkaProducerService {
 
-    private final StreamBridge streamBridge;
     private final UserPresenceHandler userPresenceHandler;
+    private final KafkaTemplate<String, Object> kafkaTemplate;
 
     public void produce(ChatRoomMessage message) {
         switch (message.getMessageType()) {
+            case CHAT_MESSAGE:
+                break;
+
             case USER_ONLINE:
                 Set<String> userPresence = userPresenceHandler.addPresenceToMap(message.getChatRoomName(), message.getUsername());
                 message.setAdditionalData(userPresence);
@@ -38,9 +40,10 @@ public class KafkaProducerService {
                 log.warn("Unregistered message type: {}", message.getMessageType());
 
         }
+        this.kafkaTemplate.send("chat-room-topic", message);
+    }
 
-
-        Message<ChatRoomMessage> build = MessageBuilder.withPayload(message).build();
-        streamBridge.send("producer-out-0", build);
+    public void privateProduce(PrivateChatMessage message) {
+        this.kafkaTemplate.send("private-chat", message);
     }
 }
