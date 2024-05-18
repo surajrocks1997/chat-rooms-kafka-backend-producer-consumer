@@ -5,7 +5,7 @@ import com.example.chatroomskafkabackendproducer.dao.UserSocialDetailsRepository
 import com.example.chatroomskafkabackendproducer.pojo.CustomException;
 import com.example.chatroomskafkabackendproducer.pojo.User;
 import com.example.chatroomskafkabackendproducer.pojo.UserSocialDetails;
-import com.example.chatroomskafkabackendproducer.service.DBService;
+import com.example.chatroomskafkabackendproducer.service.MongoDbService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +25,7 @@ public class DBController {
 
     private final UserSocialDetailsRepository userSocialDetailsRepository;
     private final UserRepository userRepository;
-    private final DBService dbService;
+    private final MongoDbService mongoDbService;
 
 
     @GetMapping("/test")
@@ -78,8 +78,20 @@ public class DBController {
     @GetMapping("/sendFR/{receiverId}")
     public void sendFriendRequest(HttpServletRequest request, @PathVariable String receiverId) {
 
+        String userId = getUserId(request);
+        mongoDbService.sendFR(userId, receiverId);
+    }
+
+    @GetMapping("/acceptFR/{acceptedID}")
+    public void acceptFriendRequest(HttpServletRequest request, @PathVariable String acceptedID) {
+        String userId = getUserId(request);
+        mongoDbService.acceptFR(userId, acceptedID);
+
+    }
+
+    private static String getUserId(HttpServletRequest request) {
         Map<String, Object> userMap = (Map<String, Object>) request.getAttribute("user");
         String userId = String.valueOf(userMap.get("id"));
-        dbService.sendFR(userId, receiverId);
+        return userId;
     }
 }
