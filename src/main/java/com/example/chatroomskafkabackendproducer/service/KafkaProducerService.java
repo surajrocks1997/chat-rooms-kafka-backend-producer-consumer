@@ -5,9 +5,11 @@ import com.example.chatroomskafkabackendproducer.pojo.PrivateChatMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 
 @Service
 @RequiredArgsConstructor
@@ -40,7 +42,17 @@ public class KafkaProducerService {
                 log.warn("Unregistered message type: {}", message.getMessageType());
 
         }
-        this.kafkaTemplate.send("chat-room-topic", message);
+        CompletableFuture<SendResult<String, Object>> future = this.kafkaTemplate.send("chat-room-topic", message);
+        future.whenComplete((res, exception) -> {
+            if (exception != null) {
+                log.error("*****Failed to send message: {}", exception.getMessage());
+            } else {
+                log.info("Message was sent Successful : {}", res.getRecordMetadata());
+            }
+        });
+
+//        future.join();    // this line will make the final thread to wait for future thread to complete, making this synchronous
+
     }
 
     public void privateProduce(PrivateChatMessage message) {

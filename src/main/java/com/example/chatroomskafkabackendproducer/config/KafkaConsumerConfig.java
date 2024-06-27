@@ -20,7 +20,7 @@ import java.util.Map;
 @Configuration
 public class KafkaConsumerConfig {
 
-    @Value("${spring.kafka.bootstrap-servers}")
+    @Value("${spring.kafka.consumer.bootstrap-servers}")
     private String bootStrapServers;
 
 

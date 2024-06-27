@@ -19,7 +19,10 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   kafka:
-    bootstrap-servers: localhost:9092
+    producer:
+      bootstrap-servers: localhost:9092,localhost:9094,localhost:9096
+    consumer:
+      bootstrap-servers: localhost:9092,localhost:9094,localhost:9096
 
 app:
   jwtSecret: 61fa7f0ba87e49a5419f0c6a686d9f6191c649bb48d917b77e356298663a1d64
