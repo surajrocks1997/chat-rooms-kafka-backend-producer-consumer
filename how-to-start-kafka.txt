@@ -34,3 +34,7 @@ bin\windows\kafka-topics.bat --bootstrap-server localhost:9092 --describe --topi
 
 -delte a topic
 bin\windows\kafka-topics.bat --bootstrap-server localhost:9092 --delete --topic surajTopic
+
+wsl2 disable ipv6 commands
+sudo sysctl -w net.ipv6.conf.all.disable_ipv6=1
+sudo sysctl -w net.ipv6.conf.default.disable_ipv6=1
