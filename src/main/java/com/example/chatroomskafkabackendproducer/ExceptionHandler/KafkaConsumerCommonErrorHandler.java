@@ -8,7 +8,7 @@ import org.springframework.kafka.listener.CommonErrorHandler;
 import org.springframework.kafka.listener.MessageListenerContainer;
 
 @Slf4j
-public class KafkaConsumerErrorHandler implements CommonErrorHandler {
+public class KafkaConsumerCommonErrorHandler implements CommonErrorHandler {
 
 
     @Override

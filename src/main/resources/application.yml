@@ -32,6 +32,8 @@ spring:
       bootstrap-servers: localhost:9092,localhost:9094,localhost:9096
     consumer:
       bootstrap-servers: localhost:9092,localhost:9094,localhost:9096
+      properties.spring.json.trusted.packages: com.example.chatroomskafkabackendproducer.pojo
+      group-id: my-consumer-group
 
 app:
   jwtSecret: 61fa7f0ba87e49a5419f0c6a686d9f6191c649bb48d917b77e356298663a1d64
