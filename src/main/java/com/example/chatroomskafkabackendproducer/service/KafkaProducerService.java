@@ -4,11 +4,14 @@ import com.example.chatroomskafkabackendproducer.pojo.ChatRoomMessage;
 import com.example.chatroomskafkabackendproducer.pojo.PrivateChatMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.kafka.clients.producer.ProducerRecord;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;
+import org.springframework.messaging.Message;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 @Service
@@ -42,7 +45,11 @@ public class KafkaProducerService {
                 log.warn("Unregistered message type: {}", message.getMessageType());
 
         }
-        CompletableFuture<SendResult<String, Object>> future = this.kafkaTemplate.send("chat-room-topic", message);
+
+        ProducerRecord<String, Object> record = new ProducerRecord<>("chat-room-topic", message);
+        record.headers().add("messageId", UUID.randomUUID().toString().getBytes());
+
+        CompletableFuture<SendResult<String, Object>> future = this.kafkaTemplate.send(record);
         future.whenComplete((res, exception) -> {
             if (exception != null) {
                 log.error("*****Failed to send message: {}", exception.getMessage());

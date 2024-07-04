@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.kafka.support.KafkaHeaders;
+import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Service;
 
@@ -26,7 +28,7 @@ public class KafkaConsumerService {
     }
 
     @KafkaListener(topics = "chat-room-topic", containerFactory = "messageFactory")
-    public void consume(@Payload Object entity) {
+    public void consume(@Payload Object entity, @Header(value = "messageId", required = false) String messageId, @Header(value = KafkaHeaders.RECEIVED_KEY, required = false) String messageKey) {
         log.info("I am here from public.");
         ChatRoomMessage message = objectMapper.convertValue((((ConsumerRecord<?, ?>) entity).value()), ChatRoomMessage.class);
         webSocketSubscriberService.sendToSubscriber(message, message.getChatRoomName());
