@@ -1,0 +1,18 @@
+Commands for Starting Kafka : Start KAFKA in Windows WSL2 (without zookeeper)
+
+1. Generate a Random UUID using Kafka Storage
+kafka-storage.sh random-uuid
+
+this will generate a uuid similar to this: YfrPqAqNQe--ebuyQvWatg
+
+2. Register this uuid with server/s property/ies
+
+kafka-storage.sh format -t YfrPqAqNQe--ebuyQvWatg -c ~/kafka_2.13-3.7.0/config/kraft/server.properties
+kafka-storage.sh format -t YfrPqAqNQe--ebuyQvWatg -c ~/kafka_2.13-3.7.0/config/kraft/server-2.properties
+kafka-storage.sh format -t YfrPqAqNQe--ebuyQvWatg -c ~/kafka_2.13-3.7.0/config/kraft/server-3.properties
+
+3. run all 3 server
+
+kafka-server-start.sh ~/kafka_2.13-3.7.0/config/kraft/server.properties
+kafka-server-start.sh ~/kafka_2.13-3.7.0/config/kraft/server-2.properties
+kafka-server-start.sh ~/kafka_2.13-3.7.0/config/kraft/server-3.properties
